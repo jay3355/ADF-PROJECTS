@@ -1,0 +1,87 @@
+{
+	"name": "Json2",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AzureDataLakeStorage1",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "Json",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"fileName": "Dataset .json",
+				"fileSystem": "b6datalake"
+			}
+		},
+		"schema": {
+			"type": "object",
+			"properties": {
+				"Restaurant ID": {
+					"type": "string"
+				},
+				"Restaurant Name": {
+					"type": "string"
+				},
+				"Country Code": {
+					"type": "string"
+				},
+				"City": {
+					"type": "string"
+				},
+				"Address": {
+					"type": "string"
+				},
+				"Locality": {
+					"type": "string"
+				},
+				"Locality Verbose": {
+					"type": "string"
+				},
+				"Longitude": {
+					"type": "string"
+				},
+				"Latitude": {
+					"type": "string"
+				},
+				"Cuisines": {
+					"type": "string"
+				},
+				"Average Cost for two": {
+					"type": "string"
+				},
+				"Currency": {
+					"type": "string"
+				},
+				"Has Table booking": {
+					"type": "string"
+				},
+				"Has Online delivery": {
+					"type": "string"
+				},
+				"Is delivering now": {
+					"type": "string"
+				},
+				"Switch to order menu": {
+					"type": "string"
+				},
+				"Price range": {
+					"type": "string"
+				},
+				"Aggregate rating": {
+					"type": "string"
+				},
+				"Rating color": {
+					"type": "string"
+				},
+				"Rating text": {
+					"type": "string"
+				},
+				"Votes": {
+					"type": "string"
+				}
+			}
+		}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

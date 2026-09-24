@@ -1,0 +1,15 @@
+{
+	"name": "B6-ADF-CI",
+	"properties": {
+		"trustModeClaimForMi": {
+			"value": "Disabled",
+			"editable": true
+		}
+	},
+	"location": "centralindia",
+	"identity": {
+		"type": "SystemAssigned",
+		"principalId": "b34ee630-fec9-4d94-8a68-a3a5a6c0eeda",
+		"tenantId": "377383c2-3be0-4e01-b2c8-8526d5e58adb"
+	}
+}

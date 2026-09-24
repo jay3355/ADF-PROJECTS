@@ -1,0 +1,16 @@
+{
+	"name": "MySqlTable",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "MYSQL_ON_PREMISES",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "MySqlTable",
+		"schema": [],
+		"typeProperties": {
+			"tableName": "`employee`"
+		}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

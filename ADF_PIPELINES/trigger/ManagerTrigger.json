@@ -1,0 +1,24 @@
+{
+	"name": "ManagerTrigger",
+	"properties": {
+		"annotations": [],
+		"runtimeState": "Started",
+		"pipelines": [
+			{
+				"pipelineReference": {
+					"referenceName": "Storage_event_trigger_pipeline",
+					"type": "PipelineReference"
+				}
+			}
+		],
+		"type": "BlobEventsTrigger",
+		"typeProperties": {
+			"blobPathBeginsWith": "/landing-zone/blobs/csvfiles/orders_batch_1.csv",
+			"ignoreEmptyBlobs": true,
+			"scope": "/subscriptions/ad861e8d-f67e-4638-846f-3c6c79d539b5/resourceGroups/B6-RG-CI/providers/Microsoft.Storage/storageAccounts/b6blobstorage",
+			"events": [
+				"Microsoft.Storage.BlobCreated"
+			]
+		}
+	}
+}

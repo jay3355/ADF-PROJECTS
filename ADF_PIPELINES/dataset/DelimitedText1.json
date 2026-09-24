@@ -1,0 +1,109 @@
+{
+	"name": "DelimitedText1",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AzureBlobStorage1",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobStorageLocation",
+				"fileName": "Dataset .csv",
+				"container": "source-container"
+			},
+			"columnDelimiter": ",",
+			"escapeChar": "\\",
+			"firstRowAsHeader": true,
+			"quoteChar": "\""
+		},
+		"schema": [
+			{
+				"name": "Restaurant ID",
+				"type": "String"
+			},
+			{
+				"name": "Restaurant Name",
+				"type": "String"
+			},
+			{
+				"name": "Country Code",
+				"type": "String"
+			},
+			{
+				"name": "City",
+				"type": "String"
+			},
+			{
+				"name": "Address",
+				"type": "String"
+			},
+			{
+				"name": "Locality",
+				"type": "String"
+			},
+			{
+				"name": "Locality Verbose",
+				"type": "String"
+			},
+			{
+				"name": "Longitude",
+				"type": "String"
+			},
+			{
+				"name": "Latitude",
+				"type": "String"
+			},
+			{
+				"name": "Cuisines",
+				"type": "String"
+			},
+			{
+				"name": "Average Cost for two",
+				"type": "String"
+			},
+			{
+				"name": "Currency",
+				"type": "String"
+			},
+			{
+				"name": "Has Table booking",
+				"type": "String"
+			},
+			{
+				"name": "Has Online delivery",
+				"type": "String"
+			},
+			{
+				"name": "Is delivering now",
+				"type": "String"
+			},
+			{
+				"name": "Switch to order menu",
+				"type": "String"
+			},
+			{
+				"name": "Price range",
+				"type": "String"
+			},
+			{
+				"name": "Aggregate rating",
+				"type": "String"
+			},
+			{
+				"name": "Rating color",
+				"type": "String"
+			},
+			{
+				"name": "Rating text",
+				"type": "String"
+			},
+			{
+				"name": "Votes",
+				"type": "String"
+			}
+		]
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

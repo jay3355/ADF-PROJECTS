@@ -1,0 +1,46 @@
+{
+	"name": "AzureSqlTable3",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "Ls_azuresqldb",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": [
+			{
+				"name": "SURRKEY",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "EMP_ID",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "FNAME",
+				"type": "varchar"
+			},
+			{
+				"name": "SALARY",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "LOC",
+				"type": "varchar"
+			},
+			{
+				"name": "IS_ACTIVE",
+				"type": "int",
+				"precision": 10
+			}
+		],
+		"typeProperties": {
+			"schema": "dbo",
+			"table": "EMPLOYEE"
+		}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

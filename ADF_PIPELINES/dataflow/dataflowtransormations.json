@@ -1,0 +1,93 @@
+{
+	"name": "dataflowtransormations",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "DelimitedText6",
+						"type": "DatasetReference"
+					},
+					"name": "sourcedata"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "DelimitedText7",
+						"type": "DatasetReference"
+					},
+					"name": "DESTINATIONSINK"
+				}
+			],
+			"transformations": [
+				{
+					"name": "SELECTEDCOLUMNS"
+				},
+				{
+					"name": "FILTERROWS"
+				},
+				{
+					"name": "split1"
+				},
+				{
+					"name": "AGGREGATEINVOICE"
+				}
+			],
+			"scriptLines": [
+				"source(output(",
+				"          InvoiceNo as integer,",
+				"          StockCode as string,",
+				"          Description as string,",
+				"          Quantity as integer,",
+				"          InvoiceDate as timestamp,",
+				"          UnitPrice as integer,",
+				"          CustomerID as string,",
+				"          Country as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false,",
+				"     partitionBy('hash', 1)) ~> sourcedata",
+				"sourcedata select(mapColumn(",
+				"          InvoiceNo,",
+				"          Description,",
+				"          InvoiceDate,",
+				"          UnitPrice,",
+				"          CustomerID,",
+				"          Country",
+				"     ),",
+				"     partitionBy('hash', 1),",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> SELECTEDCOLUMNS",
+				"SELECTEDCOLUMNS filter(InvoiceNo!=537669,",
+				"     partitionBy('hash', 1)) ~> FILTERROWS",
+				"FILTERROWS split(Country=='United Kingdom',",
+				"     Country=='Germany',",
+				"     disjoint: false,",
+				"     partitionBy('hash', 1)) ~> split1@(UK, GER, Other)",
+				"split1@UK aggregate(groupBy(InvoiceNo),",
+				"     UnitPrice = sum(UnitPrice),",
+				"     partitionBy('hash', 1)) ~> AGGREGATEINVOICE",
+				"AGGREGATEINVOICE sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     input(",
+				"          InvoiceNo as string,",
+				"          StockCode as string,",
+				"          Description as string,",
+				"          Quantity as string,",
+				"          InvoiceDate as string,",
+				"          UnitPrice as string,",
+				"          CustomerID as string,",
+				"          Country as string",
+				"     ),",
+				"     umask: 0022,",
+				"     preCommands: [],",
+				"     postCommands: [],",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> DESTINATIONSINK"
+			]
+		}
+	}
+}
