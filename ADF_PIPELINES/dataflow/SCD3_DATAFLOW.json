@@ -1,0 +1,97 @@
+{
+	"name": "SCD3_DATAFLOW",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "Staging_Dataset",
+						"type": "DatasetReference"
+					},
+					"name": "srcStaging"
+				}
+			],
+			"sinks": [
+				{
+					"name": "sinkInsert"
+				},
+				{
+					"name": "sinkUpdate"
+				}
+			],
+			"transformations": [
+				{
+					"name": "join1"
+				},
+				{
+					"name": "splitNewAndChanged"
+				},
+				{
+					"name": "derivedColumn1"
+				},
+				{
+					"name": "derivedColumn2"
+				},
+				{
+					"name": "alterInsert"
+				},
+				{
+					"name": "alterUpdate"
+				}
+			],
+			"scriptLines": [
+				"source(output(",
+				"          customer_id as integer,",
+				"          name as string,",
+				"          current_city as string,",
+				"          previous_city as string,",
+				"          action_flag as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false,",
+				"     partitionBy('hash', 1)) ~> srcStaging",
+				"srcStaging join(srcStaging@customer_id == srcTarget@customer_id,",
+				"     joinType:'left',",
+				"     matchType:'exact',",
+				"     ignoreSpaces: false,",
+				"     broadcast: 'auto')~> join1",
+				"join1 split(isNull(srcTarget@customer_id),",
+				"     not(isNull(srcStaging@customer_id)) && (iifNull(srcStaging@current_city, '') != iifNull(srcTarget@current_city, '')),",
+				"     disjoint: false,",
+				"     partitionBy('hash', 1)) ~> splitNewAndChanged@(isNew, isChanged)",
+				"splitNewAndChanged@isNew derive(customer_id = splitNewAndChanged@isNew@customer_id,",
+				"          name = splitNewAndChanged@isNew@name,",
+				"          current_city = splitNewAndChanged@isNew@current_city,",
+				"          previous_city = toString(null()),",
+				"          effective_date = currentDate(),",
+				"     partitionBy('hash', 1)) ~> derivedColumn1",
+				"splitNewAndChanged@isChanged derive(customer_id = splitNewAndChanged@isChanged@customer_id,",
+				"          name = splitNewAndChanged@isChanged@name,",
+				"          current_city = splitNewAndChanged@isChanged@current_city,",
+				"          previous_city = splitNewAndChanged@isChanged@previous_city,",
+				"          effective_date = currentDate()) ~> derivedColumn2",
+				"derivedColumn1 alterRow(insertIf(true()),",
+				"     partitionBy('hash', 1)) ~> alterInsert",
+				"derivedColumn2 alterRow(updateIf(true())) ~> alterUpdate",
+				"alterInsert sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     mapColumn(",
+				"          customer_id,",
+				"          name,",
+				"          current_city,",
+				"          previous_city,",
+				"          effective_date",
+				"     ),",
+				"     partitionBy('hash', 1)) ~> sinkInsert",
+				"alterUpdate sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> sinkUpdate"
+			]
+		}
+	}
+}
