@@ -10,13 +10,28 @@
 						"type": "DatasetReference"
 					},
 					"name": "srcStaging"
+				},
+				{
+					"dataset": {
+						"referenceName": "Target_dataset",
+						"type": "DatasetReference"
+					},
+					"name": "srctarget"
 				}
 			],
 			"sinks": [
 				{
+					"dataset": {
+						"referenceName": "AzureSqlTable5",
+						"type": "DatasetReference"
+					},
 					"name": "sinkInsert"
 				},
 				{
+					"dataset": {
+						"referenceName": "AzureSqlTable6",
+						"type": "DatasetReference"
+					},
 					"name": "sinkUpdate"
 				}
 			],
@@ -52,13 +67,25 @@
 				"     validateSchema: false,",
 				"     ignoreNoFilesFound: false,",
 				"     partitionBy('hash', 1)) ~> srcStaging",
-				"srcStaging join(srcStaging@customer_id == srcTarget@customer_id,",
+				"source(output(",
+				"          customer_id as integer,",
+				"          name as string,",
+				"          current_city as string,",
+				"          previous_city as string,",
+				"          effective_date as date",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     isolationLevel: 'READ_UNCOMMITTED',",
+				"     format: 'table') ~> srctarget",
+				"srcStaging, srctarget join(srcStaging@customer_id == srctarget@customer_id,",
 				"     joinType:'left',",
 				"     matchType:'exact',",
 				"     ignoreSpaces: false,",
+				"     partitionBy('hash', 1),",
 				"     broadcast: 'auto')~> join1",
-				"join1 split(isNull(srcTarget@customer_id),",
-				"     not(isNull(srcStaging@customer_id)) && (iifNull(srcStaging@current_city, '') != iifNull(srcTarget@current_city, '')),",
+				"join1 split(isNull(srctarget@customer_id),",
+				"     !isNull(srctarget@customer_id) && (srcStaging@current_city != srctarget@current_city),",
 				"     disjoint: false,",
 				"     partitionBy('hash', 1)) ~> splitNewAndChanged@(isNew, isChanged)",
 				"splitNewAndChanged@isNew derive(customer_id = splitNewAndChanged@isNew@customer_id,",
@@ -77,8 +104,21 @@
 				"derivedColumn2 alterRow(updateIf(true())) ~> alterUpdate",
 				"alterInsert sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
+				"     input(",
+				"          customer_id as integer,",
+				"          name as string,",
+				"          current_city as string,",
+				"          previous_city as string,",
+				"          effective_date as date",
+				"     ),",
+				"     deletable:false,",
+				"     insertable:true,",
+				"     updateable:false,",
+				"     upsertable:false,",
+				"     format: 'table',",
 				"     skipDuplicateMapInputs: true,",
 				"     skipDuplicateMapOutputs: true,",
+				"     errorHandlingOption: 'stopOnFirstError',",
 				"     mapColumn(",
 				"          customer_id,",
 				"          name,",
@@ -89,8 +129,21 @@
 				"     partitionBy('hash', 1)) ~> sinkInsert",
 				"alterUpdate sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
+				"     input(",
+				"          customer_id as integer,",
+				"          name as string,",
+				"          current_city as string,",
+				"          previous_city as string,",
+				"          effective_date as date",
+				"     ),",
+				"     deletable:false,",
+				"     insertable:true,",
+				"     updateable:false,",
+				"     upsertable:false,",
+				"     format: 'table',",
 				"     skipDuplicateMapInputs: true,",
-				"     skipDuplicateMapOutputs: true) ~> sinkUpdate"
+				"     skipDuplicateMapOutputs: true,",
+				"     errorHandlingOption: 'stopOnFirstError') ~> sinkUpdate"
 			]
 		}
 	}
