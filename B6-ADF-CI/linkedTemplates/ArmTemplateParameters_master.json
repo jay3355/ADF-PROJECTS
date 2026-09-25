@@ -1,0 +1,60 @@
+{
+	"$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"factoryName": {
+			"value": "B6-ADF-CI"
+		},
+		"AzureBlobStorage1_connectionString": {
+			"value": ""
+		},
+		"AzureDataLakeStorage1_accountKey": {
+			"value": ""
+		},
+		"Ls_azuresqldb_password": {
+			"value": ""
+		},
+		"ls_aws_s3_secretAccessKey": {
+			"value": ""
+		},
+		"AzureDataLakeStorage1_properties_typeProperties_url": {
+			"value": "https://b6datalake.dfs.core.windows.net/"
+		},
+		"AzureKeyVault1_properties_typeProperties_baseUrl": {
+			"value": "https://Akvmysqlkey.vault.azure.net/"
+		},
+		"HttpServer1_properties_typeProperties_url": {
+			"value": "https://raw.githubusercontent.com"
+		},
+		"Ls_azuresqldb_properties_typeProperties_server": {
+			"value": "sql-db-b6.database.windows.net"
+		},
+		"Ls_azuresqldb_properties_typeProperties_database": {
+			"value": "azuredb"
+		},
+		"Ls_azuresqldb_properties_typeProperties_userName": {
+			"value": "AZURESQL"
+		},
+		"MYSQL_ON_PREMISES_properties_typeProperties_server": {
+			"value": "127.0.0.1"
+		},
+		"MYSQL_ON_PREMISES_properties_typeProperties_database": {
+			"value": "azure"
+		},
+		"MYSQL_ON_PREMISES_properties_typeProperties_username": {
+			"value": "root"
+		},
+		"ls_aws_s3_properties_typeProperties_accessKeyId": {
+			"value": "AKIAQ62M5XEINBCGCI5C"
+		},
+		"ManagerTrigger_properties_typeProperties_scope": {
+			"value": "/subscriptions/ad861e8d-f67e-4638-846f-3c6c79d539b5/resourceGroups/B6-RG-CI/providers/Microsoft.Storage/storageAccounts/b6blobstorage"
+		},
+		"containerUri": {
+			"value": ""
+		},
+		"containerSasToken": {
+			"value": ""
+		}
+	}
+}
